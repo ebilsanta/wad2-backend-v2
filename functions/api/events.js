@@ -18,14 +18,17 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   const events = await loadEventCollection();
   await events.insertOne({
-        eventDate: new Date(req.body.eventDate), //need to update
+        eventDate: new Date(req.body.eventDate), 
         eventLocation: req.body.eventLocation,
         eventCategory: req.body.eventCategory,
         eventDesc: req.body.eventDesc,
         attendees: [],
         eventPhotoURL: req.body.eventPhotoURL,
         eventName: req.body.eventName,
-        eventReviews: []
+        eventReviews: [], 
+        eventHost: req.body.eventHost,
+        maxCapacity: req.body.maxCapacity,
+        isBuzzing: false,
   });
   res.status(201).send();
 })
@@ -102,6 +105,17 @@ router.patch('/attendees', async(req, res) => {
   await events.updateOne(
     {_id: mongodb.ObjectId(eventID)},
     {$set:{attendees: newAttendeesList}}
+  );
+  res.status(200).send();
+})
+
+router.patch('/buzzing', async(req, res) => {
+  const events = await loadEventCollection();
+  const isBuzzing = req.body.isBuzzing;
+  const eventID = req.body._id;
+  await events.updateOne(
+    {_id: mongodb.ObjectId(eventID)},
+    {$set:{isBuzzing: isBuzzing}}
   );
   res.status(200).send();
 })

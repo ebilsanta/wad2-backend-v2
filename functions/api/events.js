@@ -88,7 +88,7 @@ router.patch('/reviews', async(req, res) => {
   const events = await loadEventCollection();
   const newReviewsList = req.body.eventReviews;
   const eventID = req.body._id;
-  events.updateOne(
+  await events.updateOne(
     {_id: mongodb.ObjectId(eventID)},
     {$set:{eventReviews: newReviewsList}}
   );
@@ -99,7 +99,7 @@ router.patch('/attendees', async(req, res) => {
   const events = await loadEventCollection();
   const newAttendeesList = req.body.attendees;
   const eventID = req.body._id;
-  events.updateOne(
+  await events.updateOne(
     {_id: mongodb.ObjectId(eventID)},
     {$set:{attendees: newAttendeesList}}
   );

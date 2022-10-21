@@ -139,6 +139,19 @@ async function loadUserCollection() {
 	return client.db('wad2').collection('user');
 }
 
+// update user details
+router.put('/:id', async (req, res) => {
+	const users = await loadUserCollection();
+	await users.updateOne({_id: new mongodb.ObjectId(req.params.id)}, {$set: {
+		userName: req.body.userName,
+		userPassword: req.body.userPassword,
+		userAge: req.body.userAge,
+		userGender: req.body.userGender,
+		userFirstName: req.body.userFirstName,
+		userLastName: req.body.userLastName,
+	}});
+	res.status(200).send();
+})
 
 
 module.exports = router;

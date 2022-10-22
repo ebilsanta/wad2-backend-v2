@@ -57,6 +57,8 @@ router.post('/register', async (req, res) => {
 			userName: req.body.userName,
 			userPassword: req.body.userPassword,
 			userEmail: req.body.userEmail,
+			userAge: null,
+			userGender: null,
 			registeredEvents: [],
 			createdEvents: [],
 			categoryPrefs: []
@@ -67,21 +69,6 @@ router.post('/register', async (req, res) => {
 		res.send("User Exists")
 	}
 	
-})
-
-router.post('/register', async (req, res) => {
-	const users = await loadUserCollection();
-	await users.insertOne({
-		userName: req.body.userName,
-		userPassword: req.body.userPassword,
-		userAge: req.body.userAge,
-		userEmail: req.body.userEmail,
-		userGender: req.body.userGender,
-		registeredEvents: [],
-		createdEvents: [],
-		categoryPrefs: []
-	});
-	res.status(201).send();
 })
 
 // Update user's list of registeredEvents by sending userEmail and new registeredEvents list

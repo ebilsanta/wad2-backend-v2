@@ -47,12 +47,17 @@ router.post('/signin', async (req, res) => {
 // register normally one user 
 router.post('/register', async (req, res) => {
 	const users = await loadUserCollection();
-	const userExist = await users.findOne(
+	const userEmailExists = await users.findOne(
 		{
 			userEmail: req.body.userEmail,
 		}
 	)
-	if (!userExist) {
+	const userNameExists = await users.findOne(
+		{
+			userName: req.body.userName,
+		}
+	)
+	if (!userEmailExists && !userNameExists) {
 		const newUser = {
 			userName: req.body.userName,
 			userPassword: req.body.userPassword,
@@ -65,8 +70,12 @@ router.post('/register', async (req, res) => {
 		};
 		await users.insertOne(newUser);
 		res.status(201).send(newUser);
+	} else if (!userNameExists) {
+		res.status(400).send("Email is in use")
+	} else if (!userEmailExists) {
+		res.status(400).send("Username is in use")
 	} else {
-		res.send("User Exists")
+		res.status(400).send("Both username and email are in use")
 	}
 	
 })

@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
 // create event
 router.post('/', async (req, res) => {
   const events = await loadEventCollection();
-  await events.insertOne({
+  let result = await events.insertOne({
         eventDate: new Date(req.body.eventDate), 
         eventTime: req.body.eventTime,
         eventLocation: req.body.eventLocation,
@@ -31,7 +31,7 @@ router.post('/', async (req, res) => {
         maxCapacity: req.body.maxCapacity,
         isBuzzing: false,
   });
-  res.status(201).send();
+  res.status(201).send(result.insertedId); //returns the _id of newly created event
 })
 
 // delete event
@@ -57,7 +57,7 @@ router.post('/date', async(req, res) => {
     }
   }).toArray();
   res.send(filteredEvents);
-  });
+});
 
 //  filter events by categories 
 router.post('/categories', async(req, res) => {
@@ -72,9 +72,9 @@ router.post('/categories', async(req, res) => {
     }
   }).toArray();
   res.send(filteredEvents);
-  });
+});
 
-  //filter event by location
+//filter event by location
 router.post('/location', async(req, res) => {
   console.log("This is me trying to get events by location");
   // input: long lat

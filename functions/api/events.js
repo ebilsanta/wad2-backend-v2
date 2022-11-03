@@ -19,6 +19,7 @@ router.post('/', async (req, res) => {
   const events = await loadEventCollection();
   await events.insertOne({
         eventDate: new Date(req.body.eventDate), 
+        eventTime: req.body.eventTime,
         eventLocation: req.body.eventLocation,
         eventCategory: req.body.eventCategory,
         eventDesc: req.body.eventDesc,

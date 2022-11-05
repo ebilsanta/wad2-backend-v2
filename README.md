@@ -1,4 +1,19 @@
-# wad2-eventhive-backend API Documentation
+# wad2-eventhive-backend
+## Getting started
+### Running the backend locally
+1. Clone this repository locally
+2. Run the following commands in your terminal:
+```bash
+    # starting from the root directory, move into the functions folder
+    cd functions
+    # start the server
+    node index.js
+```
+3. The server should start on port 3000 and you can call our APIs with the base URL: http://localhost:3000/api/
+<br><br>
+<hr>
+
+# API Documentation
 
 ## Base API URL
 https://us-central1-wad2-eventhive-backend-d0f2c.cloudfunctions.net/app/api/  

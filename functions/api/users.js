@@ -66,7 +66,9 @@ router.post('/register', async (req, res) => {
 			userGender: null,
 			registeredEvents: [],
 			createdEvents: [],
-			categoryPrefs: []
+			categoryPrefs: [],
+			userDesc: null, 
+			userPhone: null
 		};
 		await users.insertOne(newUser);
 		res.status(201).send(newUser);
@@ -145,6 +147,8 @@ router.put('/:id', async (req, res) => {
 		userGender: req.body.userGender,
 		userFirstName: req.body.userFirstName,
 		userLastName: req.body.userLastName,
+		userDesc: req.body.userDesc,
+		userPhone: req.body.userPhone
 	}});
 	res.status(200).send("Update Success");
 })

@@ -35,9 +35,16 @@ router.post('/', async (req, res) => {
 })
 
 // delete event
-router.delete('/:id', async(req, res) => {
+router.delete('/delete/:id', async(req, res) => {
   const events = await loadEventCollection();
   await events.deleteOne({_id: new mongodb.ObjectId(req.params.id)});
+  res.status(200).send();
+})
+
+// delete ALL events
+router.delete('/deleteall', async(req, res) => {
+  const events = await loadEventCollection();
+  await events.deleteMany({})
   res.status(200).send();
 })
 

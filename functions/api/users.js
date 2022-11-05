@@ -124,11 +124,18 @@ router.patch('/prefs', async (req, res) => {
 
 
 // delete user
-router.delete('/:id', async(req, res) => {
+router.delete('/delete/:id', async(req, res) => {
 	const users = await loadUserCollection();
 	await users.deleteOne({_id: new mongodb.ObjectId(req.params.id)});
 	res.status(200).send();
 })
+
+// delete ALL users
+router.delete('/deleteall', async(req, res) => {
+	const events = await loadUserCollection();
+	await events.deleteMany({})
+	res.status(200).send();
+  })
 
 async function loadUserCollection() {
 	await client.connect();

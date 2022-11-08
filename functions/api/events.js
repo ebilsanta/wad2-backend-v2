@@ -128,6 +128,30 @@ router.put('/buzzing', async(req, res) => {
   res.status(200).send();
 })
 
+router.put('/date', async(req, res) => {
+  const events = await loadEventCollection();
+  const eventDate = new Date(req.body.eventDate);
+  const eventID = req.body._id;
+  console.log(eventDate);
+  console.log(eventID);
+  await events.updateOne(
+    {_id: mongodb.ObjectId(eventID)},
+    {$set:{eventDate: eventDate}}
+  );
+  res.status(200).send();
+})
+
+router.put('/capacity', async(req, res) => {
+  const events = await loadEventCollection();
+  const maxCapacity = req.body.maxCapacity;
+  const eventID = req.body._id;
+  await events.updateOne(
+    {_id: mongodb.ObjectId(eventID)},
+    {$set:{maxCapacity: maxCapacity}}
+  );
+  res.status(200).send();
+})
+
 async function loadEventCollection() {
   await client.connect();
   return client.db('wad2').collection('event');

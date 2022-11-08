@@ -68,7 +68,8 @@ router.post('/register', async (req, res) => {
 			createdEvents: [],
 			categoryPrefs: [],
 			userDesc: null, 
-			userPhone: null
+			userPhone: null,
+			userFullName: req.body.userFullName
 		};
 		await users.insertOne(newUser);
 		res.status(201).send(newUser);
@@ -152,10 +153,10 @@ router.put('/:id', async (req, res) => {
 		userPassword: req.body.userPassword,
 		userAge: req.body.userAge,
 		userGender: req.body.userGender,
-		userFirstName: req.body.userFirstName,
-		userLastName: req.body.userLastName,
+		categoryPrefs: req.body.categoryPrefs,
 		userDesc: req.body.userDesc,
-		userPhone: req.body.userPhone
+		userPhone: req.body.userPhone,
+		userFullName: req.body.userFullName
 	}});
 	res.status(200).send("Update Success");
 })

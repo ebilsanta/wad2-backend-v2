@@ -95,7 +95,7 @@ router.post('/location', async(req, res) => {
   
 })
 
-router.patch('/reviews', async(req, res) => {
+router.put('/reviews', async(req, res) => {
   const events = await loadEventCollection();
   const newReviewsList = req.body.eventReviews;
   const eventID = req.body._id;
@@ -106,7 +106,7 @@ router.patch('/reviews', async(req, res) => {
   res.status(200).send();
 })
 
-router.patch('/attendees', async(req, res) => {
+router.put('/attendees', async(req, res) => {
   const events = await loadEventCollection();
   const newAttendeesList = req.body.attendees;
   const eventID = req.body._id;
@@ -117,7 +117,7 @@ router.patch('/attendees', async(req, res) => {
   res.status(200).send();
 })
 
-router.patch('/buzzing', async(req, res) => {
+router.put('/buzzing', async(req, res) => {
   const events = await loadEventCollection();
   const isBuzzing = req.body.isBuzzing;
   const eventID = req.body._id;

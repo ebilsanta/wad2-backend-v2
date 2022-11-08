@@ -84,7 +84,7 @@ router.post('/register', async (req, res) => {
 })
 
 // Update user's list of registeredEvents by sending userEmail and new registeredEvents list
-router.patch('/registered', async (req, res) => {
+router.put('/registered', async (req, res) => {
 	const users = await loadUserCollection();
 	await users.updateOne(
 		{userEmail: req.body.userEmail}, 
@@ -98,7 +98,7 @@ router.patch('/registered', async (req, res) => {
 })
 
 // Update user's list of createdEvents by sending userEmail and new createdEvents list
-router.patch('/created', async (req, res) => {
+router.put('/created', async (req, res) => {
 	const users = await loadUserCollection();
 	await users.updateOne(
 		{userEmail: req.body.userEmail}, 
@@ -112,7 +112,7 @@ router.patch('/created', async (req, res) => {
 })
 
 // Update user's list of categoryPrefs by sending userEmail and new categoryPrefs list
-router.patch('/prefs', async (req, res) => {
+router.put('/prefs', async (req, res) => {
 	const users = await loadUserCollection();
 	await users.updateOne(
 		{userEmail: req.body.userEmail}, 

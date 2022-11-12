@@ -1,6 +1,7 @@
 const express = require('express')
 const mongodb = require('mongodb')
 const {MongoClient} = require('mongodb');
+var nodemailer = require('nodemailer');
 require('dotenv').config();
 
 const router = express.Router();
@@ -132,12 +133,18 @@ router.put('/date', async(req, res) => {
   const events = await loadEventCollection();
   const eventDate = new Date(req.body.eventDate);
   const eventID = req.body._id;
-  console.log(eventDate);
-  console.log(eventID);
   await events.updateOne(
     {_id: mongodb.ObjectId(eventID)},
     {$set:{eventDate: eventDate}}
   );
+  const event = await events.findOne(
+    {
+      _id: mongodb.ObjectId(eventID)
+    }
+  )
+  event.attendees.forEach(async (userObj) =>  {
+    sendDateChangeEmail(userObj.userEmail, event)
+  })
   res.status(200).send();
 })
 
@@ -155,6 +162,47 @@ router.put('/capacity', async(req, res) => {
 async function loadEventCollection() {
   await client.connect();
   return client.db('wad2').collection('event');
+}
+
+async function loadUserCollection() {
+	await client.connect();
+	return client.db('wad2').collection('user');
+}
+
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'wad.eventhive@gmail.com',
+    pass: 'nvseyasncqvenkay'
+  }
+});
+
+function sendDateChangeEmail (userEmail, eventObj) {
+    var mailOptions = {
+        from: 'wad.eventhive@gmail.com',
+        to: userEmail,
+        subject: 'Eventhive - Some event details have changed',
+        html: `
+        <h2>Hi there!</h2>
+        The date has changed for <strong>${eventObj.eventName}</strong>
+        <br>
+        <h3>Here are the updated event details:</h3>
+        <h4>${eventObj.eventName}</h4>
+        Date: ${eventObj.eventDate.toString().split(" ").slice(0,4).join(" ")}<br><br>
+        Time: ${eventObj.eventTime}<br><br>
+        Location: ${eventObj.eventLocation.SEARCHVAL}<br><br>
+        Description: ${eventObj.eventDesc}<br><br>
+        We hope to see you there!<br><br>
+        - Your friendly Eventhive bee
+        `
+      };
+    transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
 }
 
 module.exports = router;

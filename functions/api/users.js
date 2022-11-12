@@ -66,7 +66,7 @@ router.post('/register', async (req, res) => {
 			userGender: null,
 			registeredEvents: [],
 			createdEvents: [],
-			categoryPrefs: [],
+			categoryPrefs: ['Others'],
 			userDesc: null, 
 			userPhone: null,
 			userFullName: req.body.userFullName

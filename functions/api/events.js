@@ -172,7 +172,7 @@ router.put('/capacity', async(req, res) => {
   res.status(200).send();
 })
 
-router.put('/:id', async (req, res) => {
+router.put('/edit/:id', async (req, res) => {
   const events = await loadEventCollection();
   await events.updateOne({_id: new mongodb.ObjectId(req.params.id)}, {$set: {
    eventDate: new Date(req.body.eventDate), 

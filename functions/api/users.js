@@ -157,7 +157,8 @@ router.put('/:id', async (req, res) => {
 		userDesc: req.body.userDesc,
 		userPhone: req.body.userPhone,
 		categoryPrefs : req.body.categoryPrefs,
-		userFullName: req.body.userFullName
+		userFullName: req.body.userFullName,
+		userPhotoURL: req.body.userPhotoURL
 	}});
 	res.status(200).send("Update Success");
 })

@@ -172,6 +172,21 @@ router.put('/capacity', async(req, res) => {
   res.status(200).send();
 })
 
+router.put('/edit/:id', async (req, res) => {
+  const events = await loadEventCollection();
+  await events.updateOne({_id: new mongodb.ObjectId(req.params.id)}, {$set: {
+   eventDate: new Date(req.body.eventDate), 
+     eventTime: req.body.eventTime,
+     eventLocation: req.body.eventLocation,
+     eventCategory: req.body.eventCategory,
+     eventDesc: req.body.eventDesc,
+     eventPhotoURL: req.body.eventPhotoURL,
+     eventName: req.body.eventName,
+     maxCapacity: req.body.maxCapacity
+  }});
+  res.status(200).send("Update Success");
+ })
+
 async function loadEventCollection() {
   await client.connect();
   return client.db('wad2').collection('event');

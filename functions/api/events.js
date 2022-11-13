@@ -35,10 +35,23 @@ router.post('/', async (req, res) => {
   res.status(201).send(result.insertedId); //returns the _id of newly created event
 })
 
-// delete event
 router.delete('/delete/:id', async(req, res) => {
   const events = await loadEventCollection();
-  await events.deleteOne({_id: new mongodb.ObjectId(req.params.id)});
+  const eventID = new mongodb.ObjectId(req.params.id)
+  const event = await events.findOne({
+    _id: eventID
+  })
+  await event.attendees.forEach(async (userObj) => {
+    sendCancelEventEmail(userObj.userEmail, event)
+  })
+  await events.deleteOne({_id: eventID});
+  res.status(200).send();
+})
+
+router.delete('/delete', async(req, res) => {
+  const events = await loadEventCollection();
+
+  await events.deleteOne({_id: new mongodb.ObjectId(req.body.id)});
   res.status(200).send();
 })
 
@@ -202,7 +215,37 @@ function sendDateChangeEmail (userEmail, eventObj) {
         } else {
           console.log('Email sent: ' + info.response);
         }
-      });
-}
+    });
+  }
+    
+function sendCancelEventEmail (userEmail, eventObj) {
+  var mailOptions = {
+      from: 'wad.eventhive@gmail.com',
+      to: userEmail,
+      subject: 'Eventhive - An event has been cancelled',
+      html: `
+      <h2>Hi there!</h2>
+      We have some bad news for you... <br>
+      The <strong>${eventObj.eventName}</strong> event you've signed up for has been cancelled.
+      <br>
+      <h3>These were the event details:</h3>
+      <h4>${eventObj.eventName}</h4>
+      Date: ${eventObj.eventDate.toString().split(" ").slice(0,4).join(" ")}<br><br>
+      Time: ${eventObj.eventTime}<br><br>
+      Location: ${eventObj.eventLocation.SEARCHVAL}<br><br>
+      Description: ${eventObj.eventDesc}<br><br>
+      You can always check out Eventhive for many other events. See you there!<br><br>
+      - Your friendly Eventhive bee
+      `
+    };
+  transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
+  }
+
 
 module.exports = router;

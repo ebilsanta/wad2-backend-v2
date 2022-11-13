@@ -127,9 +127,9 @@ router.put('/prefs', async (req, res) => {
 
 
 // delete user
-router.delete('/delete/:id', async(req, res) => {
+router.delete('/delete', async(req, res) => {
 	const users = await loadUserCollection();
-	await users.deleteOne({_id: new mongodb.ObjectId(req.params.id)});
+	await users.deleteOne({_id: new mongodb.ObjectId(req.body.id)});
 	res.status(200).send();
 })
 

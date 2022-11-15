@@ -174,6 +174,7 @@ router.put('/capacity', async(req, res) => {
 
 router.put('/edit/:id', async (req, res) => {
   const events = await loadEventCollection();
+  const eventID = req.params.id
   await events.updateOne({_id: new mongodb.ObjectId(req.params.id)}, {$set: {
    eventDate: new Date(req.body.eventDate), 
      eventTime: req.body.eventTime,
@@ -184,6 +185,14 @@ router.put('/edit/:id', async (req, res) => {
      eventName: req.body.eventName,
      maxCapacity: req.body.maxCapacity
   }});
+  const event = await events.findOne(
+    {
+      _id: mongodb.ObjectId(eventID)
+    }
+  )
+  event.attendees.forEach(async (userObj) =>  {
+    sendDateChangeEmail(userObj.userEmail, event)
+  })
   res.status(200).send("Update Success");
  })
 
